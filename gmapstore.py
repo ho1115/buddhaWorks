@@ -81,7 +81,7 @@ def getStoresInfo(keyword, places, excelPath) : # keyword = 搜索關鍵字, pla
                 indexed += 1
             ori = ScrollOrigin.from_element(stores[storeLen - 1])
             action.scroll_from_origin(ori, 0, 1000).perform()
-            time.sleep(4) # 滾動搜索結果並等候4秒
+            time.sleep(2) # 滾動搜索結果並等候2秒
             print("still scrolling, please wait...")
             stores = driver.find_elements(By.CLASS_NAME,"hfpxzc")
         print('已拉至{}{}搜尋結果的頁底'.format(key, keyword))
@@ -91,10 +91,23 @@ def getStoresInfo(keyword, places, excelPath) : # keyword = 搜索關鍵字, pla
         if i % 100 == 0 :
             print("已萃取{}份店家資訊".format(i))
         driver.get(searchedResult["網址"][i])
-        time.sleep(2)
-        searchedResult["店名"].append(driver.find_element(By.CLASS_NAME, "DUwDvf.lfPIob").text)
-        searchedResult["分類"].append(driver.find_element(By.CLASS_NAME, "DkEaL").text)
-        searchedResult["地址"].append(driver.find_element(By.CLASS_NAME, "Io6YTe.fontBodyMedium.kR99db").text)
+        time.sleep(1)
+        
+        try :
+            storeName = driver.find_element(By.CLASS_NAME, "DUwDvf.lfPIob").text
+        except :
+            storeName = "查無店名"
+        try :
+            sort = driver.find_element(By.CLASS_NAME, "DkEaL").text 
+        except :
+            sort = "查無分類"
+        try :
+            addr = driver.find_element(By.CLASS_NAME, "Io6YTe.fontBodyMedium.kR99db").text
+        except :
+            addr = "查無地址"
+        searchedResult["店名"].append(storeName)
+        searchedResult["分類"].append(sort)
+        searchedResult["地址"].append(addr)
     driver.quit() # 關閉自動網頁
 
     newExcel = pd.DataFrame(searchedResult)
@@ -102,4 +115,4 @@ def getStoresInfo(keyword, places, excelPath) : # keyword = 搜索關鍵字, pla
     
 
 
-# getStoresInfo("圖書館", Taiwan, "./123") 以此方式使用此function將會把所有Taiwan dict中的圖書館搜尋結果寫至./123.xlsx中
+getStoresInfo("佛教文物", Taiwan, "./123")
