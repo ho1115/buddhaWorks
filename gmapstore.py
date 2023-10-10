@@ -115,4 +115,4 @@ def getStoresInfo(keyword, places, excelPath) : # keyword = 搜索關鍵字, pla
     
 
 
-getStoresInfo("佛教文物", Taiwan, "./123")
+# getStoresInfo("佛教文物", Taiwan, "./123")
